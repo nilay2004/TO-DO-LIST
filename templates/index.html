@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Todo List</h1>
+    
+    <form action="{{ url_for('add') }}" method="POST">
+        <div class="form-group">
+            <input type="text" name="content" placeholder="Add a new task..." required>
+            <button type="submit">Add Task</button>
+        </div>
+    </form>
+    
+    <div class="tasks">
+        {% if tasks|length < 1 %}
+        <div class="task">
+            <p>No tasks yet. Add one above!</p>
+        </div>
+        {% else %}
+            {% for task in tasks %}
+            <div class="task {% if task.completed %}completed{% endif %}">
+                <span>{{ task.content }}</span>
+                <div class="task-actions">
+                    <a href="{{ url_for('complete', id=task.id) }}" class="complete">
+                        {% if task.completed %}
+                        <i class="fas fa-times"></i> Undo
+                        {% else %}
+                        <i class="fas fa-check"></i> Complete
+                        {% endif %}
+                    </a>
+                    <a href="{{ url_for('update', id=task.id) }}"><i class="fas fa-edit"></i> Update</a>
+                    <a href="{{ url_for('delete', id=task.id) }}" class="delete"><i class="fas fa-trash-alt"></i> Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
